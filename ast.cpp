@@ -1,8 +1,29 @@
 #include "ast.h"
+#define IND(s) for(int i = 0; i < s; ++i) printf("  ");
 
 const char * opStrs[] = {"CATOP", "STAROP", "OROP", "LITOP"};
 AST::AST() {}
 AST::AST(std::unique_ptr<Node> r) : root(std::move(r)) {}
+
+std::ostream& prnode(std::ostream& out, const AST::Node& d, int dpt) {
+    IND(dpt);
+    out << opStrs[d.op] << std::endl;
+    if(d.l) {
+        IND(dpt);
+        out << "l: " << std::endl;
+        prnode(out, *(d.l), dpt+1);
+    }
+    if(d.r) {
+        IND(dpt);
+        out << "r: " << std::endl;
+        prnode(out, *(d.r), dpt+1);
+    }
+    if(d.v.size() > 0) {
+        IND(dpt);
+        out << "v: " << d.v << std::endl;
+    }
+    return out;
+}
 
 std::ostream& operator<< (std::ostream& out, const AST::Node& d) {
     out << "op: " << opStrs[d.op];
@@ -17,6 +38,6 @@ std::ostream& operator<< (std::ostream& out, const AST::Node& d) {
 
 std::ostream& operator<< (std::ostream& out, const AST& a) {
     if(a.root)
-        out << *(a.root);
+        prnode(out,*(a.root),0);
     return out;
 }

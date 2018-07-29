@@ -13,6 +13,9 @@ lexer.o: lexer.h lexer.cpp token.o
 ast.o: ast.h ast.cpp
 	g++ -c ast.cpp
 
+dfa.o: dfa.h dfa.cpp ast.o
+	g++ -c dfa.cpp
+
 clean:
 	rm *.o
 	rm *~

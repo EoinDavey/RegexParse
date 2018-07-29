@@ -2,22 +2,25 @@
  * RE ::= O | O . RE
  * O  ::= S | S `|` O
  * S  ::= LIT | LIT *
- * AT ::= [a-z] | ( RE )
+ * LIT ::= [a-z] | ( RE )
  */
 
 #include "parser.h"
 #include <iostream>
-#define EXPCT(s) if(expect(s)) return std::unique_ptr<AST::Node>{};
-#define IND(s) for(int i = 0; i < s; ++i) printf("  ");
-#define CHECK(s) if(!s) return std::unique_ptr<AST::Node>{};
+#define EXPCT(s) if(expect(s)) return nodeptr{};
+#define CHECK(s) if(!s) return nodeptr{};
 
 Parser::Parser(std::string input) : l(Lexer(input)) {}
+
+typedef std::unique_ptr<AST::Node> nodeptr;
 
 AST Parser::parse() {
     tok = l.nextToken();
     auto d = re();
-    if(!d || tok.type != END)
+    if(!d || tok.type != END) {
+        std::cout << "could not parse" << std::endl;
         return AST{};
+    }
     return AST(std::move(d));
 }
 
@@ -42,7 +45,7 @@ bool Parser::expect(Type t) {
     return true;
 }
 
-std::unique_ptr<AST::Node> Parser::re() {
+nodeptr Parser::re() {
     auto l = o();
     CHECK(l);
     if(peek(LIT) || peek(LPAREN)) {
@@ -57,7 +60,7 @@ std::unique_ptr<AST::Node> Parser::re() {
     return l;
 }
 
-std::unique_ptr<AST::Node> Parser::o() {
+nodeptr Parser::o() {
     auto l = s();
     CHECK(l);
     if(accept(OR)){
@@ -72,7 +75,7 @@ std::unique_ptr<AST::Node> Parser::o() {
     return l;
 }
 
-std::unique_ptr<AST::Node> Parser::s() {
+nodeptr Parser::s() {
     auto l = lit();
     CHECK(l);
     if(accept(STAR)){
@@ -84,8 +87,8 @@ std::unique_ptr<AST::Node> Parser::s() {
     return l;
 }
 
-std::unique_ptr<AST::Node> Parser::lit() {
-    std::unique_ptr<AST::Node> n = std::make_unique<AST::Node>();
+nodeptr Parser::lit() {
+    nodeptr n = std::make_unique<AST::Node>();
     if(accept(LPAREN)) {
         n = re();
         EXPCT(RPAREN);
@@ -96,5 +99,5 @@ std::unique_ptr<AST::Node> Parser::lit() {
         EXPCT(LIT);
         return n;
     }
-    return std::unique_ptr<AST::Node>{};
+    return nodeptr{};
 }
