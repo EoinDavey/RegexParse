@@ -12,22 +12,22 @@ Token Lexer::nextToken() {
     Token t;
     switch(ch) {
         case '|':
-            t = std::move(Token(OR, "|"));
+            t = std::move(Token(OR, '|'));
             break;
         case '\0':
-            t = std::move(Token(END, ""));
+            t = std::move(Token(END, '%'));
             break;
         case '*':
-            t = std::move(Token(STAR, "*"));
+            t = std::move(Token(STAR, '*'));
             break;
         case '(':
-            t = std::move(Token(LPAREN, "("));
+            t = std::move(Token(LPAREN, '('));
             break;
         case ')':
-            t = std::move(Token(RPAREN, ")"));
+            t = std::move(Token(RPAREN, ')'));
             break;
        default:
-            t = std::move(Token(LIT, std::string(1,ch)));
+            t = std::move(Token(LIT, ch));
     }
     readChar();
     return t;

@@ -1,5 +1,5 @@
-test: test.cpp token.o lexer.o parser.o ast.o
-	g++ test.cpp token.o lexer.o parser.o ast.o -o test
+test: test.cpp token.o lexer.o parser.o ast.o dfa.o
+	g++ test.cpp token.o lexer.o parser.o ast.o dfa.o -o test
 
 parser.o: parser.cpp parser.h token.o lexer.o ast.o
 	g++ -c parser.cpp

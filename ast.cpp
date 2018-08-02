@@ -5,6 +5,8 @@ const char * opStrs[] = {"CATOP", "STAROP", "OROP", "LITOP"};
 AST::AST() {}
 AST::AST(std::unique_ptr<Node> r) : root(std::move(r)) {}
 
+AST::Node::Node() : v('\0') {}
+
 std::ostream& prnode(std::ostream& out, const AST::Node& d, int dpt) {
     IND(dpt);
     out << opStrs[d.op] << std::endl;
@@ -18,7 +20,7 @@ std::ostream& prnode(std::ostream& out, const AST::Node& d, int dpt) {
         out << "r: " << std::endl;
         prnode(out, *(d.r), dpt+1);
     }
-    if(d.v.size() > 0) {
+    if(d.v != '\0') {
         IND(dpt);
         out << "v: " << d.v << std::endl;
     }
@@ -31,7 +33,7 @@ std::ostream& operator<< (std::ostream& out, const AST::Node& d) {
         out << " l: {" << *(d.l) << "}";
     if(d.r)
         out << " r: {" << *(d.r) << "}";
-    if(d.v.size() > 0)
+    if(d.v != '\0')
         out << " v: " << d.v;
     return out;
 }

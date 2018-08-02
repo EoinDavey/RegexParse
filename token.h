@@ -7,7 +7,6 @@
  */
 #ifndef TOKEN_H
 #define TOKEN_H
-#include<string>
 #include <iostream>
 
 enum Type { LIT=0, OR, STAR, END, LPAREN, RPAREN};
@@ -15,10 +14,10 @@ extern const char* typeStrs[6];
 
 class Token {
     public:
-        Token(Type, std::string);
+        Token(Type, char);
         Token();
         Type type;
-        std::string literal;
+        char literal;
     friend std::ostream& operator<<(std::ostream&,const Token&);
 };
 #endif

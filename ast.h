@@ -9,9 +9,10 @@ class AST {
     public:
         class Node {
             public:
+                Node();
                 Op op;
                 std::unique_ptr<Node> l,r;
-                std::string v;
+                char v;
             friend std::ostream& operator<< (std::ostream&, const Node&);
         };
         std::unique_ptr<Node> root;
