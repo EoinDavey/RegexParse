@@ -20,7 +20,7 @@ std::ostream& prnode(std::ostream& out, const AST::Node& d, int dpt) {
         out << "r: " << std::endl;
         prnode(out, *(d.r), dpt+1);
     }
-    if(d.v != '\0') {
+    if(d.v) {
         IND(dpt);
         out << "v: " << d.v << std::endl;
     }
@@ -33,7 +33,7 @@ std::ostream& operator<< (std::ostream& out, const AST::Node& d) {
         out << " l: {" << *(d.l) << "}";
     if(d.r)
         out << " r: {" << *(d.r) << "}";
-    if(d.v != '\0')
+    if(d.v)
         out << " v: " << d.v;
     return out;
 }

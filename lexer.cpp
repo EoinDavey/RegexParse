@@ -44,7 +44,7 @@ void Lexer::readChar() {
 }
 
 void Lexer::skipWhitespace() {
-    while(ch==' ' || ch=='\t' || ch=='\n' || ch=='r') {
+    while(ch=='\t' || ch=='\n' || ch=='r') {
         readChar();
     }
 }

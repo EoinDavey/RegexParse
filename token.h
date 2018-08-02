@@ -1,10 +1,3 @@
-/*
- * RE ::= O | RE . O
- * O ::= S | O `|` S
- * S ::= B | B *
- * B ::= L | ( RE )
- * L ::= [a - z] | e
- */
 #ifndef TOKEN_H
 #define TOKEN_H
 #include <iostream>

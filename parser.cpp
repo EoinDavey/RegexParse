@@ -6,8 +6,10 @@
  */
 
 #include "parser.h"
+
 #include <iostream>
-#define EXPCT(s) if(expect(s)) return nodeptr{};
+
+#define XPCT(s) if(expect(s)) return nodeptr{};
 #define CHECK(s) if(!s) return nodeptr{};
 
 Parser::Parser(std::string input) : l(Lexer(input)) {}
@@ -18,7 +20,7 @@ AST Parser::parse() {
     tok = l.nextToken();
     auto d = re();
     if(!d || tok.type != END) {
-        std::cout << "could not parse" << std::endl;
+        std::cerr << "could not parse" << std::endl;
         return AST{};
     }
     return AST(std::move(d));
@@ -41,18 +43,18 @@ bool Parser::expect(Type t) {
         tok = l.nextToken();
         return false;
     }
-    std::cout << "unexpected " << tok.literal << std::endl;
+    std::cerr << "unexpected " << tok.literal << std::endl;
     return true;
 }
 
 nodeptr Parser::re() {
-    auto l = o();
+    nodeptr l = o();
     CHECK(l);
     if(peek(LIT) || peek(LPAREN)) {
-        auto n = std::make_unique<AST::Node>();
+        nodeptr n = std::make_unique<AST::Node>();
         n->op = CATOP;
         n->l = std::move(l);
-        auto r = re();
+        nodeptr r = re();
         CHECK(r);
         n->r = std::move(r);
         return n;
@@ -61,13 +63,13 @@ nodeptr Parser::re() {
 }
 
 nodeptr Parser::o() {
-    auto l = s();
+    nodeptr l = s();
     CHECK(l);
     if(accept(OR)){
-        auto n = std::make_unique<AST::Node>();
+        nodeptr n = std::make_unique<AST::Node>();
         n->op = OROP;
         n->l = std::move(l);
-        auto r = o();
+        nodeptr r = o();
         CHECK(r);
         n->r = std::move(r);
         return n;
@@ -76,10 +78,10 @@ nodeptr Parser::o() {
 }
 
 nodeptr Parser::s() {
-    auto l = lit();
+    nodeptr l = lit();
     CHECK(l);
     if(accept(STAR)){
-        auto n = std::make_unique<AST::Node>();
+        nodeptr n = std::make_unique<AST::Node>();
         n->op = STAROP;
         n->l = std::move(l);
         return n;
@@ -91,12 +93,12 @@ nodeptr Parser::lit() {
     nodeptr n = std::make_unique<AST::Node>();
     if(accept(LPAREN)) {
         n = re();
-        EXPCT(RPAREN);
+        XPCT(RPAREN);
         return n;
     } else if(peek(LIT)) {
         n->op = LITOP;
         n->v = tok.literal;
-        EXPCT(LIT);
+        XPCT(LIT);
         return n;
     }
     return nodeptr{};
