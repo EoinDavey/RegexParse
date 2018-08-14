@@ -1,7 +1,7 @@
 #include "ast.h"
 #define IND(s) for(int i = 0; i < s; ++i) printf("  ");
 
-const char * opStrs[] = {"CATOP", "STAROP", "OROP", "LITOP"};
+const char * opStrs[] = {"CATOP", "STAROP", "PLUSOP", "OPTOP", "OROP", "LITOP"};
 AST::AST() {}
 AST::AST(std::unique_ptr<Node> r) : root(std::move(r)) {}
 

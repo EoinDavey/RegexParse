@@ -1,6 +1,6 @@
 #include "token.h"
 
-const char* typeStrs[] = {"LIT","OR","STAR","END","LPAREN","RPAREN"};
+const char* typeStrs[] = {"LIT","OR","STAR","PLUS","OPT","END","LPAREN","RPAREN"};
 
 Token::Token(Type t, char c) : type(t), literal(c) {}
 Token::Token(){}

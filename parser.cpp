@@ -1,7 +1,7 @@
 /*
  * RE ::= O | O . RE
  * O  ::= S | S `|` O
- * S  ::= LIT | LIT *
+ * S  ::= LIT | LIT * | LIT + | LIT ?
  * LIT ::= [a-z] | ( RE )
  */
 
@@ -83,6 +83,18 @@ nodeptr Parser::s() {
     if(accept(STAR)){
         nodeptr n = std::make_unique<AST::Node>();
         n->op = STAROP;
+        n->l = std::move(l);
+        return n;
+    }
+    if(accept(PLUS)){
+        nodeptr n = std::make_unique<AST::Node>();
+        n->op = PLUSOP;
+        n->l = std::move(l);
+        return n;
+    }
+    if(accept(OPT)){
+        nodeptr n = std::make_unique<AST::Node>();
+        n->op = OPTOP;
         n->l = std::move(l);
         return n;
     }

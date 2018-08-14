@@ -4,7 +4,7 @@
 #include <memory>
 #include <iostream>
 
-enum Op {CATOP, STAROP, OROP, LITOP};
+enum Op {CATOP, STAROP, PLUSOP, OPTOP, OROP, LITOP};
 class AST {
     public:
         class Node {

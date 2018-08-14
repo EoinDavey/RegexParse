@@ -47,6 +47,12 @@ DFA Node2DFA(const AST::Node& n) {
                         std::make_move_iterator(r.ends.end()));
                 return n;
             }
+        case OPTOP:
+            {
+                DFA l = Node2DFA(*n.l);
+                l.ends.push_back(l.start);
+                return l;
+            }
         case STAROP:
             {
                 DFA l = Node2DFA(*n.l);
@@ -56,6 +62,13 @@ DFA Node2DFA(const AST::Node& n) {
                     v->edges.push_back(Edge(l.start, true, '\0'));
                 l.start = std::move(u);
                 l.ends.push_back(l.start);
+                return l;
+            }
+        case PLUSOP:
+            {
+                DFA l = Node2DFA(*n.l);
+                for(vptr& v: l.ends)
+                    v->edges.push_back(Edge(l.start, true, '\0'));
                 return l;
             }
         default:

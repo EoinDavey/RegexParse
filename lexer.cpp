@@ -12,22 +12,38 @@ Token Lexer::nextToken() {
     Token t;
     switch(ch) {
         case '|':
-            t = std::move(Token(OR, '|'));
+            t = Token(OR, '|');
             break;
         case '\0':
-            t = std::move(Token(END, '%'));
+            t = Token(END, '%');
             break;
         case '*':
-            t = std::move(Token(STAR, '*'));
+            t = Token(STAR, '*');
+            break;
+        case '+':
+            t = Token(PLUS, '+');
             break;
         case '(':
-            t = std::move(Token(LPAREN, '('));
+            t = Token(LPAREN, '(');
             break;
         case ')':
-            t = std::move(Token(RPAREN, ')'));
+            t = Token(RPAREN, ')');
+            break;
+        case '?':
+            t = Token(OPT, '?');
+            break;
+        case '\\':
+            readChar();
+            if(ch == '|' || ch == '*' || ch == '+' || ch == '?' ||
+                    ch == '(' || ch == ')' || ch == '\\') {
+                t = Token(LIT, ch);
+            } else {
+                t = Token(END, '%');
+                printf("Invalid escape code \\%c", ch);
+            }
             break;
        default:
-            t = std::move(Token(LIT, ch));
+            t = Token(LIT, ch);
     }
     readChar();
     return t;

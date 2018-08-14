@@ -2,8 +2,8 @@
 #define TOKEN_H
 #include <iostream>
 
-enum Type { LIT=0, OR, STAR, END, LPAREN, RPAREN};
-extern const char* typeStrs[6];
+enum Type { LIT=0, OR, STAR, PLUS, OPT, END, LPAREN, RPAREN};
+extern const char* typeStrs[8];
 
 class Token {
     public:
